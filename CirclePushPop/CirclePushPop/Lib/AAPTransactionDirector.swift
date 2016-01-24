@@ -117,7 +117,7 @@ class AAPTransactionDirector: NSObject,UIViewControllerAnimatedTransitioning,UIN
     }
     
     private func transitionFinishedCanceling(){
-        self._context?.containerView()?.layer.timeOffset=0
+        self._context?.containerView()!.layer.timeOffset=0
         displayLink?.invalidate()
   
         _context?.completeTransition(false)
@@ -156,8 +156,16 @@ class AAPTransactionDirector: NSObject,UIViewControllerAnimatedTransitioning,UIN
    
     func animateTransition(transitionContext: UIViewControllerContextTransitioning){
         self._context=transitionContext
+      
+  
+        let _ = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!.view
+        let _ = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!.view
+        
+     
         
          self.animationBlock?(transactionContext: self._context!, animationTime: self.duration!, transitionCompletion: { () -> Void in
+            
+        
           
            transitionContext.completeTransition(true)
       

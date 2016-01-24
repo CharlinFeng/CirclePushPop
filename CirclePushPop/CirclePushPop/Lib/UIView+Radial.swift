@@ -51,20 +51,24 @@ extension  UIView {
 
 
     
-    func radialAppireanceWithStartFrame(startFrame:CGRect,duration: CGFloat, complitBlock:()->Void ){
-
+    
+    func radialAppireanceWithStartFrame(startFrame:CGRect,duration: CGFloat,complitBlock:()->Void ){
+        
+        hidden = false
+        
         let maskLayer = CAShapeLayer()
         let maskRect = startFrame
         let path = CGPathCreateWithEllipseInRect(maskRect, nil)
         maskLayer.path=path
         
-        let d: CGFloat = sqrt(pow(self.frame.size.width, 2)+pow(self.frame.size.height, 2) )*2
+        let d = sqrt(pow(self.frame.size.width, 2)+pow(self.frame.size.height, 2) )*2
         
         let newRect = CGRectMake(self.frame.size.width/2-d/2, maskRect.origin.y-d/2, d, d)
         
         let newPath = CGPathCreateWithEllipseInRect(newRect, nil)
         
         self.layer.mask = maskLayer;
+        
         
         let revealAnimation = CABasicAnimation(keyPath: "path")
         revealAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
@@ -73,6 +77,7 @@ extension  UIView {
         
         revealAnimation.duration =  CFTimeInterval(duration)
         
+
         maskLayer.path=newPath
         
         let animator:LayerAnimator = LayerAnimator(layer: maskLayer, animation: revealAnimation)
@@ -83,6 +88,10 @@ extension  UIView {
             complitBlock()
             
         }
+        
+        
+     
+        
     }
     
     func radialDissmisWithStartFrame(startFrame:CGRect,duration: CGFloat,complitBlock:()->Void ){
@@ -93,7 +102,7 @@ extension  UIView {
         let path = CGPathCreateWithEllipseInRect(maskRect, nil)
         maskLayer.path=path
         
-        let d: CGFloat = sqrt(pow(self.frame.size.width, 2)+pow(self.frame.size.height, 2) )*2
+        let d = sqrt(pow(self.frame.size.width, 2)+pow(self.frame.size.height, 2) )*2
         
         let newRect = CGRectMake(self.frame.size.width/2-d/2, maskRect.origin.y-d/2, d, d)
         
@@ -105,12 +114,16 @@ extension  UIView {
         let revealAnimation = CABasicAnimation(keyPath: "path")
         revealAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
         revealAnimation.fromValue = newPath
-        revealAnimation.toValue =  path
+        revealAnimation.toValue = path
         
         revealAnimation.duration =  CFTimeInterval(duration)
         
         
         maskLayer.path=newPath
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64((Double(duration) - 0.05) * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+            self.hidden = true
+        })
         
         let animator:LayerAnimator = LayerAnimator(layer: maskLayer, animation: revealAnimation)
         
@@ -119,8 +132,6 @@ extension  UIView {
             complitBlock()
             
         }
-        
-        
         
         
     }

@@ -27,12 +27,12 @@ extension UINavigationController {
     *
     * @param startFrame where circle start
     */
-    func radialPushViewController(viewController: UIViewController, duration: CGFloat = 0.33 ,startFrame:CGRect = CGRectNull, transitionCompletion: (() -> Void)? = nil ){
+    public func radialPushViewController(viewController: UIViewController, duration: CGFloat = 0.33 ,startFrame:CGRect = CGRectNull, transitionCompletion: (() -> Void)? = nil ){
         
         var rect = startFrame
         if(rect == CGRectNull){
             
-            rect = CGRectMake((self.visibleViewController?.view.frame.size.width)!, self.visibleViewController!.view.frame.size.height/2, 0, 0)
+            rect = CGRectMake(self.visibleViewController!.view.frame.size.width, self.visibleViewController!.view.frame.size.height/2, 0, 0)
         }
         
       
@@ -44,9 +44,11 @@ extension UINavigationController {
         animatorDirector?.animationBlock={(transactionContext:UIViewControllerContextTransitioning, animationTime: CGFloat ,completion:()->Void)->Void in
  
             let toViewController = transactionContext.viewControllerForKey(UITransitionContextToViewControllerKey)
+
+            
             let fromViewController = transactionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)
             let containerView = transactionContext.containerView()
-            
+            toViewController!.view.frame = fromViewController!.view.frame
             containerView!.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
 
             toViewController?.view .radialAppireanceWithStartFrame(rect, duration: animationTime, complitBlock: { () -> Void in
@@ -55,16 +57,17 @@ extension UINavigationController {
                 completion();
                 
                 transitionCompletion?();
+
+                
            
               
            })
 
         }
-          self.pushViewController(viewController, animated: true)
+        
+        self.pushViewController(viewController, animated: true)
 
-        
-        
-          self.delegate = nil;
+        self.delegate = nil;
       
     }
 //MARK: POP
@@ -73,7 +76,7 @@ extension UINavigationController {
     *
     * @param startFrame where circle start
     */
-    func radialPopViewController( duration: CGFloat = 0.33 ,startFrame:CGRect = CGRectNull, transitionCompletion: (() -> Void)? = nil ){
+    public func radialPopViewController( duration: CGFloat = 0.33 ,startFrame:CGRect = CGRectNull, transitionCompletion: (() -> Void)? = nil ){
         
         var rect = startFrame
         if(rect == CGRectNull){
@@ -82,7 +85,7 @@ extension UINavigationController {
         }
         
         
-        var animatorDirector=AAPTransactionDirector();
+        let animatorDirector=AAPTransactionDirector();
         animatorDirector.duration=duration
         self.delegate=animatorDirector;
         animatorDirector.animationBlock={(transactionContext:UIViewControllerContextTransitioning, animationTime: CGFloat ,completion:()->Void)->Void in
@@ -91,9 +94,18 @@ extension UINavigationController {
             let fromViewController = transactionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)
             let containerView = transactionContext.containerView()
             containerView?.insertSubview(toViewController!.view, belowSubview: fromViewController!.view)
-//            containerView?.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
-            fromViewController?.view.radialDissmisWithStartFrame(rect, duration: animationTime, complitBlock: completion)
-//            toViewController?.view.radialDissmisWithStartFrame(rect, duration: animationTime, complitBlock: completion)
+            //            containerView?.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
+//            UIView.animateWithDuration(Double(duration), animations: { () -> Void in
+//                UIView.setAnimationCurve(UIViewAnimationCurve(rawValue: 7)!)
+//                fromViewController?.view.alpha=0
+//            })
+            fromViewController?.view.radialDissmisWithStartFrame(rect, duration: animationTime, complitBlock: {
+                
+                completion()
+            })
+            //            toViewController?.view.radialDissmisWithStartFrame(rect, duration: animationTime, complitBlock: completion)
+                
+//            })
             
         }
         
@@ -104,7 +116,7 @@ extension UINavigationController {
     
     //MARK: Swipe
     
-    func enableRadialSwipe(){
+  public  func enableRadialSwipe(){
         
   
         
@@ -114,7 +126,7 @@ extension UINavigationController {
         
         
     }
-    func disableRadialSwipe(){
+  public   func disableRadialSwipe(){
 self.enableGesture(false)
         
     }
@@ -211,7 +223,7 @@ self.enableGesture(false)
                 let fromViewController = transactionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)
                 let containerView = transactionContext.containerView()
                 
-                containerView?.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
+                containerView!.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
                 
                 let maskLayer = CAShapeLayer()
                 let maskRect = CGRectMake(location.x-location.x/2, location.y-location.x/2, 0, 0);
