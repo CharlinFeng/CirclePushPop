@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         
         let detailVC = DetailVC(nibName:"DetailVC", bundle: nil)
         detailVC.sourceFrame = btn.frame
-        navigationController?.radialPushViewController(detailVC, duration: 0.5, startFrame: btn.frame, transitionCompletion: nil)
+        navigationController?.radialPushViewController(detailVC, duration: 1, startFrame: btn.frame, transitionCompletion: nil)
     }
 
 

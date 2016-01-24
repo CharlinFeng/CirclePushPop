@@ -19,7 +19,7 @@ class DetailVC: UIViewController {
     }
     
     @IBAction func popAction(sender: AnyObject) {
-        navigationController?.radialPopViewController(0.3, startFrame: sourceFrame, transitionCompletion: nil)
+        navigationController?.radialPopViewController(1, startFrame: sourceFrame, transitionCompletion: nil)
     }
 
 }

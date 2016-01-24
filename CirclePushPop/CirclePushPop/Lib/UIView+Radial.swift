@@ -77,7 +77,8 @@ extension  UIView {
         
         revealAnimation.duration =  CFTimeInterval(duration)
         
-
+        maskLayer.borderColor = UIColor.greenColor().CGColor
+        maskLayer.borderWidth = 5
         maskLayer.path=newPath
         
         let animator:LayerAnimator = LayerAnimator(layer: maskLayer, animation: revealAnimation)
@@ -108,6 +109,8 @@ extension  UIView {
         
         let newPath = CGPathCreateWithEllipseInRect(newRect, nil)
         
+        
+        
         self.layer.mask = maskLayer;
         
         
@@ -117,11 +120,12 @@ extension  UIView {
         revealAnimation.toValue = path
         
         revealAnimation.duration =  CFTimeInterval(duration)
-        
+  
+    
         
         maskLayer.path=newPath
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64((Double(duration) - 0.05) * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64((Double(duration) - 0.1) * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
             self.hidden = true
         })
         
