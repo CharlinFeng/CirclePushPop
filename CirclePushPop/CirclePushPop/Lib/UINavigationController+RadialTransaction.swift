@@ -50,7 +50,10 @@ extension UINavigationController {
             let containerView = transactionContext.containerView()
             toViewController!.view.frame = fromViewController!.view.frame
             containerView!.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
-
+           
+            UIView.animateWithDuration(Double(duration), animations: { () -> Void in
+                fromViewController?.view.transform = CGAffineTransformMakeScale(3, 3)
+                }, completion: nil)
             toViewController?.view .radialAppireanceWithStartFrame(rect, duration: animationTime, complitBlock: { () -> Void in
                 
                 
@@ -94,6 +97,12 @@ extension UINavigationController {
             let fromViewController = transactionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)
             let containerView = transactionContext.containerView()
             containerView?.insertSubview(toViewController!.view, belowSubview: fromViewController!.view)
+            
+            UIView.animateWithDuration(Double(duration), animations: { () -> Void in
+                toViewController?.view.transform = CGAffineTransformIdentity
+            }, completion: nil)
+            
+            
             //            containerView?.insertSubview(toViewController!.view, aboveSubview: fromViewController!.view)
 //            UIView.animateWithDuration(Double(duration), animations: { () -> Void in
 //                UIView.setAnimationCurve(UIViewAnimationCurve(rawValue: 7)!)
